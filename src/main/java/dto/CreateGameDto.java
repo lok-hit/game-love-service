@@ -1,18 +1,20 @@
 package dto;
 
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
-@Schema(description = "Represents a game with its total love count")
-public record TopLovedGameDto(
-        @JsonProperty("gameName")
+@Schema(description = "DTO for creating a new game")
+public record CreateGameDto(
+
         @Schema(description = "Name of the game", example = "Minecraft")
+        @NotBlank(message = "Game name must not be blank")
+        @Size(min = 2, max = 100)
         @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Only letters and digits allowed")
-        String gameName,
-
-        @JsonProperty("loveCount")
-        @Schema(description = "Number of times the game was loved", example = "128")
-        long loveCount
+        @JsonProperty("name")
+        String name
 ) {}
 

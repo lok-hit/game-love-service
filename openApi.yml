@@ -1,0 +1,277 @@
+openapi: 3.0.3
+info:
+  title: Game Love Service API
+  version: 1.0.0
+  description: REST API for tracking which games players love
+  contact:
+    name: Mateusz @ Lokhit
+    email: mateusz@lokhit.org
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    GameDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Minecraft
+      required: [name]
+
+    CreateGameDto:
+      type: object
+      properties:
+        name:
+          type: string
+          pattern: "^[a-zA-Z0-9]+$"
+          example: Minecraft
+      required: [name]
+
+    UpdateGameDto:
+      type: object
+      properties:
+        name:
+          type: string
+          pattern: "^[a-zA-Z0-9]+$"
+          example: Terraria
+      required: [name]
+
+    PlayerDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 42
+        username:
+          type: string
+          example: Mateusz123
+      required: [username]
+
+    CreatePlayerDto:
+      type: object
+      properties:
+        username:
+          type: string
+          pattern: "^[a-zA-Z0-9]+$"
+          example: Mateusz123
+      required: [username]
+
+    UpdatePlayerDto:
+      type: object
+      properties:
+        username:
+          type: string
+          pattern: "^[a-zA-Z0-9]+$"
+          example: MateuszX
+      required: [username]
+
+    LoveDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 100
+        username:
+          type: string
+          example: Mateusz123
+        gameName:
+          type: string
+          example: Minecraft
+        lovedAt:
+          type: string
+          format: date-time
+          example: 2025-09-05T22:00:00
+      required: [username, gameName, lovedAt]
+
+    CreateLoveDto:
+      type: object
+      properties:
+        username:
+          type: string
+          pattern: "^[a-zA-Z0-9]+$"
+          example: Mateusz123
+        gameName:
+          type: string
+          pattern: "^[a-zA-Z0-9]+$"
+          example: Minecraft
+        lovedAt:
+          type: string
+          format: date-time
+          example: 2025-09-05T22:00:00
+      required: [username, gameName, lovedAt]
+
+    UpdateLoveDto:
+      type: object
+      properties:
+        lovedAt:
+          type: string
+          format: date-time
+          example: 2025-09-06T10:00:00
+      required: [lovedAt]
+
+paths:
+  /api/games:
+    get:
+      summary: Get all games
+      responses:
+        '200':
+          description: List of games
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameDto'
+    post:
+      summary: Create a new game
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGameDto'
+      responses:
+        '201':
+          description: Game created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameDto'
+
+  /api/games/{id}:
+    get:
+      summary: Get game by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Game found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameDto'
+    put:
+      summary: Update game
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateGameDto'
+      responses:
+        '200':
+          description: Game updated
+    delete:
+      summary: Delete game
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Game deleted
+
+  /api/players:
+    get:
+      summary: Get all players
+      responses:
+        '200':
+          description: List of players
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlayerDto'
+    post:
+      summary: Create a new player
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePlayerDto'
+      responses:
+        '201':
+          description: Player created
+
+  /api/loves:
+    get:
+      summary: Get all love entries
+      responses:
+        '200':
+          description: List of love entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LoveDto'
+    post:
+      summary: Create a new love entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLoveDto'
+      responses:
+        '201':
+          description: Love entry created
+
+  /api/loves/{id}:
+    put:
+      summary: Update love timestamp
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLoveDto'
+      responses:
+        '200':
+          description: Love updated
+    delete:
+      summary: Delete love entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Love deleted
