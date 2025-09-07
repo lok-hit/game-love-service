@@ -10,7 +10,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+
 @Entity
+@Table(name = "loves", uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "player_username", "game_name" })
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,16 +26,15 @@ public class Love {
     @JsonProperty("id")
     private Long id;
 
-
-    @ManyToOne
     @NotNull(message = "Player must not be null")
     @JsonProperty(value = "player", required = true)
-    private Player player;
+    @Column(name = "player_username", length = 100, nullable = false)
+    private String playerUsername;
 
-    @ManyToOne
     @NotNull(message = "Game must not be null")
     @JsonProperty(value = "game", required = true)
-    private Game game;
+    @Column(name="game_name", length = 100, nullable = false)
+    private String gameName;
 
     @NotNull(message = "Timestamp must not be null")
     @JsonProperty("lovedAt")

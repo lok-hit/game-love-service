@@ -11,6 +11,10 @@ public class LoveSpecification {
         return (root, query, cb) -> cb.equal(root.get("player").get("id"), playerId);
     }
 
+    public static Specification<Love> hasPlayerUsername(String username) {
+        return (root, query, cb) -> cb.equal(root.get("player").get("username"), username);
+    }
+
     public static Specification<Love> hasGameId(Long gameId) {
         return (root, query, cb) -> cb.equal(root.get("game").get("id"), gameId);
     }
@@ -22,6 +26,11 @@ public class LoveSpecification {
     public static Specification<Love> lovedBefore(LocalDateTime dateTime) {
         return (root, query, cb) -> cb.lessThan(root.get("lovedAt"), dateTime);
     }
+
+    public static Specification<Love> hasGame(String gameName) {
+        return (root, query, cb) -> cb.equal(root.get("game").get("gameName"), gameName);
+    }
+
 }
 
 

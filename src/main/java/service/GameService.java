@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import repository.GameRepository;
 import repository.GameSpecification;
@@ -39,7 +41,14 @@ public class GameService {
         this.gameEventProducer = gameEventProducer;
     }
 
-    @Transactional
+
+    @Transactional(
+            isolation = Isolation.REPEATABLE_READ,
+            propagation = Propagation.REQUIRED,
+            rollbackFor = {ValidationException.class, RuntimeException.class},
+            noRollbackFor = {IllegalArgumentException.class}
+    )
+
     @CacheEvict(value = {"games", "game-search", "game-pages"}, allEntries = true)
     public GameDto createGame(CreateGameDto dto) {
         if (gameRepository.existsByName(dto.name())) {
@@ -55,7 +64,12 @@ public class GameService {
         return gameMapper.toDto(saved);
     }
 
-    @Transactional
+    @Transactional(
+            isolation = Isolation.REPEATABLE_READ,
+            propagation = Propagation.REQUIRED,
+            rollbackFor = {ValidationException.class, RuntimeException.class},
+            noRollbackFor = {IllegalArgumentException.class}
+    )
     @CacheEvict(value = {"games", "game-search", "game-pages"}, key = "#id", allEntries = true)
     public GameDto updateGame(Long id, UpdateGameDto dto) {
         Game lockedGame = gameRepository.findById(id)
