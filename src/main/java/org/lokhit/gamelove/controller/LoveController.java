@@ -16,7 +16,7 @@ import org.lokhit.gamelove.service.LoveService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/loves")
+@RequestMapping("/love")
 public class LoveController {
 
     private final LoveService loveService;

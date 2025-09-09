@@ -123,6 +123,10 @@ public class GameService {
         return gameRepository.findAllOrderByLoveCountDesc(pageable)
                 .map(gameMapper::toDto);
     }
+
+    public List<Game> getAllGames() {
+        return gameRepository.findAll();
+    }
 }
 
 
