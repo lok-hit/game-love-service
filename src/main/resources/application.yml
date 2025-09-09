@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   security:
     oauth2:
@@ -5,35 +8,46 @@ spring:
         jwt:
           issuer-uri: http://localhost:8080/realms/gamelove
           jwk-set-uri: http://localhost:8080/realms/gamelove/protocol/openid-connect/certs
-  kafka:
-    bootstrap-servers: localhost:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      retries: 3
-    listener:
-      ack-mode: record
-      retry:
-        enabled: true
-        max-attempts: 3
-        backoff:
-          delay: 1000
-    template:
-      default-topic: game-events
-    consumer:
-      enable-auto-commit: false
-      auto-offset-reset: earliest
-    dlq:
-      enabled: true
-      topic: game-events-dlt
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gamelove
+    username: gamelove
+    password: secret
+    driver-class-name: org.postgresql.Driver
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,prometheus
-  metrics:
-    export:
-      prometheus:
-        enabled: true
+    jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
+
+    kafka:
+      bootstrap-servers: localhost:9092
+      producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      consumer:
+        group-id: gamelove-consumer
+        auto-offset-reset: earliest
+        enable-auto-commit: false
+
+    cache:
+      type: hazelcast
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health, info, prometheus
+    metrics:
+      export:
+        prometheus:
+          enabled: true
+
+  logging:
+    level:
+      root: INFO
+      org.lokhit.gamelove: DEBUG
+      org.springframework.web: WARN
 
