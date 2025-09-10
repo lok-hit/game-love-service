@@ -35,6 +35,7 @@ class LoveMapperTest {
     void shouldMapLoveToDtoCorrectly() {
         // given
         game.setGameName("Minecraft");
+        player.setUsername("mateusz");
         Love love = new Love();
         love.setId(5L);
         love.setPlayer(player);
@@ -55,6 +56,7 @@ class LoveMapperTest {
         // given
         Love love = new Love();
         love.setId(5L);
+        player.setUsername("mateusz");
         love.setPlayer(player);
         love.setGame(game);
         love.setLovedAt(LocalDateTime.of(2025, 9, 9, 15, 30));
