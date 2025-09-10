@@ -1,20 +1,41 @@
-spring:
-  kafka:
-    bootstrap-servers: localhost:9092
-  datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-  h2:
-    console:
-      enabled: true
-  main:
-    allow-bean-definition-overriding: true
+# ===============================
+# 🔗 Kafka Configuration
+# ===============================
+spring.kafka.bootstrap-servers=localhost:9092
+  
+  # Producer
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer=org.apache.kafka.common.serialization.StringSerializer
+  
+  # Consumer
+spring.kafka.consumer.group-id=game-love-group
+spring.kafka.consumer.auto-offset-reset=earliest
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.value-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+  
+  # ===============================
+  # 🧪 H2 + JPA Configuration
+  # ===============================
+  # 📦 H2 Database
+spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+  
+  # 🧠 Hibernate Dialect
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect
+  
+  # 🛠 Schema generation
+spring.jpa.hibernate.ddl-auto=create
+  
+  # 🧾 SQL init
+spring.sql.init.mode=always
+spring.sql.init.schema-locations=classpath:schema.sql
+spring.sql.init.data-locations=classpath:data.sql
+ 
+  
+  # ===============================
+  # 🛠 Misc
+  # ===============================
+spring.h2.console.enabled=true
+spring.main.allow-bean-definition-overriding=true

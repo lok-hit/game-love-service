@@ -5,11 +5,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Set;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="players")
 public class Player {
 
     @Id
@@ -20,9 +23,10 @@ public class Player {
     @JsonProperty(value = "username", required = true)
     private String username;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonProperty(value = "loves", required = true)
-    private Set<Love> loves;
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Love> loves = new ArrayList<>();
+
+
 
     public Long getId() {
         return id;
@@ -40,11 +44,11 @@ public class Player {
         this.username = username;
     }
 
-    public Set<Love> getLoves() {
+    public List<Love> getLoves() {
         return loves;
     }
 
-    public void setLoves(Set<Love> loves) {
+    public void setLoves(List<Love> loves) {
         this.loves = loves;
     }
 }

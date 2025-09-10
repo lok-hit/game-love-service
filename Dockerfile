@@ -7,6 +7,7 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
+
 # Building game-love-service
 RUN mvn clean package -DskipTests
 
@@ -17,6 +18,17 @@ WORKDIR /app
 
 # Copying JAR
 COPY --from=build /app/target/game-love-service-1.0-SNAPSHOT.jar app.jar
+
+ENV JAVA_OPTS="-Xms512m -Xmx2048m \
+  -XX:+UseG1GC \
+  -XX:MaxGCPauseMillis=200 \
+  -XX:+UseStringDeduplication \
+  -XX:+AlwaysPreTouch \
+  -XX:+HeapDumpOnOutOfMemoryError \
+  -XX:HeapDumpPath=/app/heapdump.hprof \
+  -XX:+ExitOnOutOfMemoryError \
+  -Dspring.profiles.active=prod \
+  -Djava.security.egd=file:/dev/./urandom"
 
 # Copying configuration
 COPY src/main/resources/application.yml ./config/application.yml

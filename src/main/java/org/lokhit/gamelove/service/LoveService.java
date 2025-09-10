@@ -53,17 +53,18 @@ public class LoveService {
     )
     @CacheEvict(value = { "loves", "love-search", "love-pages" }, allEntries = true)
     public LoveDto createLove(CreateLoveDto dto) {
-        if (!playerRepository.existsByUsername(dto.username()) ||
-                !gameRepository.existsByGameName(dto.gameName())) {
+        if (!playerRepository.existsByUsername(dto.player().getUsername()) ||
+                !gameRepository.existsByGameName(dto.game().getGameName())) {
             throw new ValidationException("Invalid player or game");
         }
 
-        if (loveRepository.existsByPlayerUsernameAndGame_GameName(dto.username(), dto.gameName())) {
+        if (loveRepository.existsByPlayerUsernameAndGame_GameName(dto.player().getUsername(), dto.game().getGameName())) {
             throw new ValidationException("Love already exists");
         }
 
         Love love = new Love();
-        love.setPlayerUsername(dto.username());
+        love.setPlayer(dto.player());
+        love.setGame(dto.game());
         love.setLovedAt(dto.lovedAt());
 
         Love saved = loveRepository.save(love);
@@ -126,7 +127,6 @@ public class LoveService {
                 .orElseThrow(() -> new ResourceNotFoundException("Game not found"));
 
         Love love = new Love();
-        love.setPlayerUsername(username);
         love.setGame(game);
         love.setLovedAt(LocalDateTime.now());
 

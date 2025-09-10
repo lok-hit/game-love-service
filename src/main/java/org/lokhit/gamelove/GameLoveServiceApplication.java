@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "org.lokhit.gamelove")
 @EnableAsync
 @EnableRetry
 @EnableCaching

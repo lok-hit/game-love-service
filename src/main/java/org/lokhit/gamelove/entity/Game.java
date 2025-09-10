@@ -5,11 +5,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "games")
 public class Game {
 
     @Id
@@ -22,8 +24,8 @@ public class Game {
     private String gameName;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonProperty("love")
-    private Set<Love> loves;
+    @JsonProperty("loves")
+    private Set<Love> loves = new HashSet<>();
 
     public Long getGameId() {
         return gameId;

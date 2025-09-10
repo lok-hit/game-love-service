@@ -10,15 +10,16 @@ public class LoveMapper {
     public LoveDto toDto(Love love) {
         return new LoveDto(
                 love.getId(),
-                love.getPlayerUsername(),
-                love.getGame().getGameName(),
+                love.getPlayer(),
+                love.getGame(),
                 love.getLovedAt()
         );
     }
 
     public Love fromDto(LoveDto dto) {
         Love love = new Love();
-        love.setPlayerUsername(dto.playerUsername());
+        love.setPlayer(dto.player());
+        love.setGame(dto.game());
         love.setLovedAt(dto.lovedAt());
         return love;
     }

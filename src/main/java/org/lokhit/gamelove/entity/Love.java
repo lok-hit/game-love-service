@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "loves", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"player_username", "game_name"})
+        @UniqueConstraint(columnNames = {"player_id", "game_id"})
 })
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,16 +21,18 @@ public class Love {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty(value = "player", required = true)
-    @Column(name = "player_username", length = 100, nullable = false)
-    private String playerUsername;
-
     @JsonProperty("lovedAt")
     private LocalDateTime lovedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "game_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "game_id", nullable = false)
     private Game game;
+
+    @ManyToOne
+    @JoinColumn(name = "player_id", nullable = false)
+    private Player player;
+
+
 
 
     public Long getId() {
@@ -39,14 +41,6 @@ public class Love {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getPlayerUsername() {
-        return playerUsername;
-    }
-
-    public void setPlayerUsername(String playerUsername) {
-        this.playerUsername = playerUsername;
     }
 
     public LocalDateTime getLovedAt() {
@@ -63,5 +57,13 @@ public class Love {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

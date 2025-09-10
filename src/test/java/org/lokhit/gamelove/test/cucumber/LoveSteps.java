@@ -48,13 +48,13 @@ public class LoveSteps {
     @Then("the game {string} should appear in the love history of player {string}")
     public void the_game_should_appear_in_love_history(String gameName, String username) {
         loveHistory = loveService.getLoveHistory(username);
-        assertTrue(loveHistory.stream().anyMatch(g -> g.gameName().equalsIgnoreCase(gameName)));
+        assertTrue(loveHistory.stream().anyMatch(g -> g.game().getGameName().equalsIgnoreCase(gameName)));
     }
 
     @Then("the game {string} should not appear in the love history of player {string}")
     public void the_game_should_not_appear_in_love_history(String gameName, String username) {
         loveHistory = loveService.getLoveHistory(username);
-        assertFalse(loveHistory.stream().anyMatch(g -> g.gameName().equalsIgnoreCase(gameName)));
+        assertFalse(loveHistory.stream().anyMatch(g -> g.game().getGameName().equalsIgnoreCase(gameName)));
     }
 
     @When("I request the top {int} loved games")

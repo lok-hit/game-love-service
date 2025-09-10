@@ -35,3 +35,23 @@ docker-compose up --build
 • 	BDD: Cucumber
 🧠 Author
 Mateusz @ Lokhit
+
+
+jvm config:
+java \
+  -Xms512m \
+  -Xmx2048m \
+  -Xss512k \
+  -XX:+UseG1GC \
+  -XX:MaxGCPauseMillis=200 \
+  -XX:+PrintGCDetails \
+  -XX:+PrintGCTimeStamps \
+  -XX:+HeapDumpOnOutOfMemoryError \
+  -XX:HeapDumpPath=./heapdump.hprof \
+  -XX:+ExitOnOutOfMemoryError \
+  -XX:+UseStringDeduplication \
+  -XX:+AlwaysPreTouch \
+  -XX:+DisableExplicitGC \
+  -Dspring.profiles.active=prod \
+  -Djava.security.egd=file:/dev/./urandom \
+  -jar game-love-service.jar
